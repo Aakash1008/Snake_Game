@@ -1,43 +1,76 @@
 # Snake_Game
 
-Snake Game Using python
-=================
+## Description
 
-This is a classic Snake Game implemented using the Python turtle module. The game features a snake that moves around the screen and tries to eat fruits to score points. The snake grows longer as it eats more fruits, making the game more challenging.
+The Snake Game allows players to control a snake and navigate it around the screen to eat food and grow longer. The objective is to achieve the highest possible score without colliding with the boundaries of the game or the snake's own body.
 
-Instructions
-------------
-- Use the arrow keys (Up, Down, Left, Right) to control the snake's movement.
-- The snake can move up, down, left, or right, but cannot move in the opposite direction of its current movement.
-- The objective is to eat as many fruits as possible without colliding with the boundaries of the screen or the snake's own body.
-- The game ends if the snake hits the boundaries or collides with itself.
-- The score is displayed at the top of the screen, and it increases by one each time the snake eats a fruit.
-- The game speed increases gradually as the score increases.
+## Features
 
-Dependencies
-------------
-This game requires the `turtle` module, which is a part of the standard Python library. No additional installations are necessary.
+- Smooth snake movement controlled by arrow keys
+- Randomly generated food for the snake to eat
+- Increasing length of the snake as it eats food
+- Game over when the snake collides with the boundaries or itself
+- High score tracking and display
+- Option to play again after game over
 
-Usage
------
-1. Ensure that you have Python installed on your system.
-2. Copy and paste the provided code into a Python file (e.g., snake_game.py).
-3. Run the Python file using a Python interpreter.
-4. The game window will appear, and you can start playing immediately.
+## Requirements
 
-GitHub Repository
------------------
-You can find the source code and other related files for this Snake Game on GitHub: https://github.com/Aakash1008/Snake_Game.git
+- Python 3.x
+- Pygame library
 
-Author
-------
-The Snake Game was developed by Aakash Jain (https://github.com/Aakash1008)
+## Installation
 
-Acknowledgements
-----------------
-Special thanks to the turtle module in Python for providing a simple and beginner-friendly way to create graphics and games.
+1. Clone the repository:
 
-Screenshots
------------
-<img width="523" alt="image" src="https://github.com/Aakash1008/Snake_Game/assets/112507589/ed6fbc66-7b88-466d-b21b-bfacb781eeb4">
-<img width="520" alt="image" src="https://github.com/Aakash1008/Snake_Game/assets/112507589/ab497914-9c6c-4760-a69d-b547cbf620ef">
+   ```shell
+   git clone https://github.com/Aakash1008/Snake_Game.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```shell
+   cd snake-game
+   ```
+
+3. Install the Pygame library using pip:
+
+   ```shell
+   pip install pygame
+   ```
+
+## Usage
+
+1. Run the game by executing the following command:
+
+   ```shell
+   python main.py
+   ```
+
+2. Use the arrow keys to control the snake's movement.
+3. Eat the food that appears on the screen to increase your score and the length of the snake.
+4. Avoid colliding with the boundaries of the game window or the snake's own body.
+5. The game ends when the snake collides, and you can choose to play again or quit.
+6. The current score and high score are displayed on the screen.
+7. The high score is automatically saved and updated in the `highscore.txt` file.
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue on the GitHub repository.
+
+
+## Acknowledgments
+
+The Pygame library was used to develop the game. More information about Pygame can be found [here](https://www.pygame.org/).
+
+
+## Screanshots
+
+<img width="598" alt="image" src="https://github.com/Aakash1008/Snake_Game/assets/112507589/ddc2ab61-12b3-40c2-b0e1-f80e65840204">
+
+<img width="600" alt="image" src="https://github.com/Aakash1008/Snake_Game/assets/112507589/e925a2a9-2504-4c94-a53d-3185b41687be">
+
+## Author
+
+Aakash Ajay Jain
+```
+
