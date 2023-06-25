@@ -1,175 +1,160 @@
-#importing libraries
-import turtle
-import random
+import pygame
 import time
+import random
 
+# Initialize Pygame
+pygame.init()
 
-#creating turtle screen
-screen = turtle.Screen()
-screen.title('SNAKE GAME')
-screen.setup(width = 700, height = 700)
-screen.tracer(0)
-turtle.bgcolor('Black')
+# Define colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
+# Set the width and height of the display window
+window_width = 800
+window_height = 600
+display = pygame.display.set_mode((window_width, window_height))
+pygame.display.set_caption('Snake Game')
 
+# Set the game's clock
+clock = pygame.time.Clock()
 
-##creating a border for our game
+# Set the size of the snake's body and the speed of the game
+snake_block_size = 20
+snake_speed = 15
 
-turtle.speed(5)
-turtle.pensize(4)
-turtle.penup()
-turtle.goto(-310,250)
-turtle.pendown()
-turtle.color('red')
-turtle.forward(600)
-turtle.right(90)
-turtle.forward(500)
-turtle.right(90)
-turtle.forward(600)
-turtle.right(90)
-turtle.forward(500)
-turtle.penup()
-turtle.hideturtle()
+# Set the font style and size for displaying the score
+font_style = pygame.font.SysFont(None, 50)
 
-#score
-score = 0
-delay = 0.1
+# Function to display the current score
+def your_score(score):
+    value = font_style.render("Your Score: " + str(score), True, WHITE)
+    display.blit(value, [0, 0])
 
+# Function to display the high score
+def high_score(score):
+    value = font_style.render("High Score: " + str(score), True, WHITE)
+    display.blit(value, [0, 50])
 
-#snake
-snake = turtle.Turtle()
-snake.speed(0)
-snake.shape('square')
-snake.color("red")
-snake.penup()
-snake.goto(0,0)
-snake.direction = 'stop'
+def our_snake(snake_block_size, snake_list):
+    for x in snake_list:
+        pygame.draw.rect(display, GREEN, [x[0], x[1], snake_block_size, snake_block_size])
 
+def message(msg, color):
+    mesg = font_style.render(msg, True, color)
+    display.blit(mesg, [window_width / 6, window_height / 3])
 
-#food
-fruit = turtle.Turtle()
-fruit.speed(0)
-fruit.shape('circle')
-fruit.color('red')
-fruit.penup()
-fruit.goto(30,30)
+def game_loop():
+    game_over = False
+    game_end = False
 
-old_fruit=[]
+    # Initial position of the snake
+    x1 = window_width / 2
+    y1 = window_height / 2
 
-#scoring
-scoring = turtle.Turtle()
-scoring.speed(0)
-scoring.color("white")
-scoring.penup()
-scoring.hideturtle()
-scoring.goto(0,300)
-scoring.write("Score :",align="center",font=("Courier",24,"bold"))
+    # Change in position of the snake
+    x1_change = 0
+    y1_change = 0
 
+    # Create the snake body as a list
+    snake_List = []
+    Length_of_snake = 1
 
-#######define how to move
-def snake_go_up():
-    if snake.direction != "down":
-        snake.direction = "up"
+    # Generate a random position for the food
+    foodx = round(random.randrange(0, window_width - snake_block_size) / 20.0) * 20.0
+    foody = round(random.randrange(0, window_height - snake_block_size) / 20.0) * 20.0
 
-def snake_go_down():
-    if snake.direction != "up":
-        snake.direction = "down"
-
-def snake_go_left():
-    if snake.direction != "right":
-        snake.direction = "left"
-
-def snake_go_right():
-    if snake.direction != "left":
-        snake.direction = "right"
-
-def snake_move():
-    if snake.direction == "up":
-        y = snake.ycor()
-        snake.sety(y + 20)
-
-    if snake.direction == "down":
-        y = snake.ycor()
-        snake.sety(y - 20)
-
-    if snake.direction == "left":
-        x = snake.xcor()
-        snake.setx(x - 20)
-
-    if snake.direction == "right":
-        x = snake.xcor()
-        snake.setx(x + 20)
-
-# Keyboard bindings
-screen.listen()
-screen.onkeypress(snake_go_up, "Up")
-screen.onkeypress(snake_go_down, "Down")
-screen.onkeypress(snake_go_left, "Left")
-screen.onkeypress(snake_go_right, "Right")
-
-#main loop
-
-while True:
-        screen.update()
-            #snake and fruit coliisions
-        if snake.distance(fruit)< 20:
-                x = random.randint(-290,270)
-                y = random.randint(-240,240)
-                fruit.goto(x,y)
-                scoring.clear()
-                score+=1
-                scoring.write("Score:{}".format(score),align="center",font=("Courier",24,"bold"))
-                delay-=0.001
-                
-                ## creating new_ball
-                new_fruit = turtle.Turtle()
-                new_fruit.speed(0)
-                new_fruit.shape('square')
-                new_fruit.color('red')
-                new_fruit.penup()
-                old_fruit.append(new_fruit)
-                
-
-        #adding ball to snake
+    # Load and display the high score
+    try:
+        with open("highscore.txt", "r") as file:
+            highscore = file.read()
+            if highscore == '':
+                highscore = 0
+            high_score(int(highscore))
+    except FileNotFoundError:
+        highscore = 0
+        high_score(highscore)
         
-        for index in range(len(old_fruit)-1,0,-1):
-                a = old_fruit[index-1].xcor()
-                b = old_fruit[index-1].ycor()
+    # Initialize the high score variable
+    high_score_value = int(highscore)
 
-                old_fruit[index].goto(a,b)
-                                     
-        if len(old_fruit)>0:
-                a= snake.xcor()
-                b = snake.ycor()
-                old_fruit[0].goto(a,b)
-        snake_move()
+    while not game_over:
 
-        ##snake and border collision    
-        if snake.xcor()>280 or snake.xcor()< -300 or snake.ycor()>240 or snake.ycor()<-240:
-                time.sleep(1)
-                screen.clear()
-                screen.bgcolor('black')
-                scoring.goto(0,0)
-                scoring.write("   GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"bold"))
+        while game_end == True:
+            display.fill(BLACK)
+            message("You lost! Press Q-Quit or C-Play Again", RED)
+            pygame.display.update()
 
+            # Check for key presses
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        game_over = True
+                        game_end = False
+                    if event.key == pygame.K_c:
+                        game_loop()
 
-        ## snake collision
-        for food in old_fruit:
-                if food.distance(snake) < 20:
-                        time.sleep(1)
-                        screen.clear()
-                        screen.bgcolor('turquoise')
-                        scoring.goto(0,0)
-                        scoring.write("    GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"bold"))
+        # Check for key presses
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_over = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    x1_change = -snake_block_size
+                    y1_change = 0
+                elif event.key == pygame.K_RIGHT:
+                    x1_change = snake_block_size
+                    y1_change = 0
+                elif event.key == pygame.K_UP:
+                    y1_change = -snake_block_size
+                    x1_change = 0
+                elif event.key == pygame.K_DOWN:
+                    y1_change = snake_block_size
+                    x1_change = 0
 
+        # Check if the snake hits the boundaries of the window
+        if x1 >= window_width or x1 < 0 or y1 >= window_height or y1 < 0:
+            game_end = True
 
-                
-        time.sleep(delay)
+        # Update the position of the snake
+        x1 += x1_change
+        y1 += y1_change
+        display.fill(BLACK)
+        pygame.draw.rect(display, BLUE, [foodx, foody, snake_block_size, snake_block_size])
+        snake_Head = []
+        snake_Head.append(x1)
+        snake_Head.append(y1)
+        snake_List.append(snake_Head)
+        if len(snake_List) > Length_of_snake:
+            del snake_List[0]
 
-turtle.Terminator()
+        for x in snake_List[:-1]:
+            if x == snake_Head:
+                game_end = True
 
+        our_snake(snake_block_size, snake_List)
+        your_score(Length_of_snake - 1)
+        high_score(high_score_value)
+        pygame.display.update()
 
+        if x1 == foodx and y1 == foody:
+            foodx = round(random.randrange(0, window_width - snake_block_size) / 20.0) * 20.0
+            foody = round(random.randrange(0, window_height - snake_block_size) / 20.0) * 20.0
+            Length_of_snake += 1
 
+        clock.tick(snake_speed)
 
+    # Update the high score if necessary
+    if Length_of_snake - 1 > high_score_value:
+        high_score_value = Length_of_snake - 1
 
+    # Save the high score to a file
+    with open("highscore.txt", "w") as file:
+        file.write(str(high_score_value))
 
+    pygame.quit()
+    quit()
+
+game_loop()
